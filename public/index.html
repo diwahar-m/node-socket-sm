@@ -25,7 +25,7 @@
         const  socket = io();
         const chat = document.getElementById('chat');
         const usersList = document.getElementById('users');
-        const messageForm = document.getElementById('message-form');
+        const messageForm = document.getElementById('message');
         const messageInput = document.getElementById('message-input');
         const userName = prompt("Enter your username")
         // 
@@ -35,12 +35,21 @@
             addMessage(`${user} has joined the chat.`  )
         })
 
+       socket.on('userLeft', (user)=> {
+             addMessage(`${user} has left the chat`);
+       })
+
         socket.on("userList", (userList)=> {
             userList?.map(list => {
                 const listElement = document.createElement("li");
                 listElement.innerHTML = list;
                 users.appendChild(listElement);
             })
+        })
+
+        // 
+        socket.on('chatMessage', (message)=> {
+            addMessage(`${message.userName}: ${message.text}`)
         })
 
         // handling Form submission 
